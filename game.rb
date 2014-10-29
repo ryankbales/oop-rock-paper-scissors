@@ -58,48 +58,46 @@ class RockPaperScissors
   include BestWeapon
   attr_accessor :player1, :player2
 
-  def initialize(player1, player2)
-    puts "Hello #{player1.name} and #{player2.name}! Let's play Rock, Paper, Scissors!"
+  def initialize
+    puts "Let's play Rock, Paper, Scissors!"
     puts "=================================================================="
   end
 
-  def play(player1, player2)
-    begin
-      puts "#{player1.name} choose: (r)ock, (p)aper or (s)cissors"
-      human_input = gets.chomp.downcase.to_sym
-    end until WEAPONS.keys.include?(human_input)
-    machine_choice = WEAPONS.keys.shuffle.first
+  def play
+    puts "Enter your name:"
+    name = gets.chomp.capitalize
+    player1 = Human.new(name)
+    player2 = Machine.new
+    response = "yes" #default is set to keep the game playing unless player says no
+    status = true
+    while player1.play_again?(response, status)
+      begin
+        puts "#{player1.name} choose: (r)ock, (p)aper or (s)cissors"
+        human_input = gets.chomp.downcase.to_sym
+      end until WEAPONS.keys.include?(human_input)
+      machine_choice = WEAPONS.keys.shuffle.first
 
-    choices = []
-    choices << WEAPONS[human_input]
-    choices << WEAPONS[machine_choice]
+      choices = []
+      choices << WEAPONS[human_input]
+      choices << WEAPONS[machine_choice]
 
-    result = self.best_weapon(choices)
-    puts "#{player2.name} picked #{choices[1]}"
-    puts "#{player1.name} picked #{choices[0]}"
+      result = self.best_weapon(choices)
+      puts "#{player2.name} picked #{choices[1]}"
+      puts "#{player1.name} picked #{choices[0]}"
 
-    if result == "win"
-      puts "#{player1.name}, you win!"
-    elsif result == "lose"
-      puts "Ah shucks, #{player1.name} lost!"
-    else
-      puts "It's a tie, try again!"
+      if result == "win"
+        puts "#{player1.name}, you win!"
+      elsif result == "lose"
+        puts "Ah shucks, #{player1.name} lost!"
+      else
+        puts "It's a tie, try again!"
+      end
+      puts "#{player1.name}, would you like to play again?"
+      response = gets.chomp.downcase
     end
   end
 end
 
 WEAPONS = {r: "rock", p: "paper", s: "scissors"}
-
-puts "Enter your name:"
-name = gets.chomp.capitalize
-player1 = Human.new(name)
-player2 = Machine.new
-game = RockPaperScissors.new(player1, player2)
-
-response = "yes" #default is set to keep the game playing unless player says no
-status = true
-while player1.play_again?(response, status)
-  game.play(player1, player2)
-  puts "#{player1.name}, would you like to play again?"
-  response = gets.chomp.downcase
-end
+game = RockPaperScissors.new()
+game.play
