@@ -1,7 +1,7 @@
 require 'pry'
 
-module BestWeapon
-  def best_weapon(choices) #takes an array of two items
+module Winner
+  def get_winner(choices) #takes an array of two items
     win_lose_tie = ""
     if choices[0] == "rock"
       if choices[1] == "paper"
@@ -55,7 +55,7 @@ class Machine
 end
 
 class RockPaperScissors
-  include BestWeapon
+  include Winner
   attr_accessor :player1, :player2
 
   def initialize
@@ -81,7 +81,7 @@ class RockPaperScissors
       choices << WEAPONS[human_input]
       choices << WEAPONS[machine_choice]
 
-      result = self.best_weapon(choices)
+      result = self.get_winner(choices)
       puts "#{player2.name} picked #{choices[1]}"
       puts "#{player1.name} picked #{choices[0]}"
 
